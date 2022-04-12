@@ -26,9 +26,11 @@ if __name__ == '__main__':
         if file.endswith('.en'):
             file_path = f"{path}{file}"
             posting = Postings(file_path, file_id)
-            for tokened_w in posting.normalization(posting.read_file()):
-                postings_dictionary[tokened_w].append(posting.document_id)
+            # for tokened_w in posting.normalization(posting.read_file()):
+            #     postings_dictionary[tokened_w].append(posting.document_id)
+            posting.add_to_dic(posting.normalization(posting.read_file()), postings_dictionary)
             file_id += 1
+
     q = dict(sorted(postings_dictionary.items()))
     print(q)
     print("Time: (%.2f)s\n" % (time() - start), file=stderr)
