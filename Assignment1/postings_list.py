@@ -1,9 +1,3 @@
-import os
-import sys
-from sys import stdin, stderr
-from time import time
-from collections import defaultdict
-from collections import OrderedDict
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -40,7 +34,11 @@ class Postings:
         self.postings_diction = postings_diction
 
         for w in self.normalized_tokenized_voc_sorted:
-            if w in self.postings_diction.keys():
-                self.postings_diction[w].extend(self.document_id)
-            self.postings_diction[w] = [self.document_id]
-        return self.postings_diction
+            self.postings_diction[w].append(self.document_id)
+        return self.remove_duplicate(self.postings_diction)
+
+    def remove_duplicate(self, with_duplicate_dict):
+        self.with_duplicate_dict = with_duplicate_dict
+
+        for k in self.with_duplicate_dict:
+            self.with_duplicate_dict[k] = list(dict.fromkeys(self.with_duplicate_dict[k]))
