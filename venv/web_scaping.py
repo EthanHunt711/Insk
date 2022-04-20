@@ -46,21 +46,21 @@ soup = BeautifulSoup(my_page, "html.parser")
 # print(soup.title.get_text())
 # print(soup.h1.get_text())
 
-site_string = "https://www.bbc.com/persian"
+site_string = "https://www.sparknotes.com/lit/animaldreams/summary/"
 
 jn_site = urllib.request.urlopen(site_string)
 soup2 = BeautifulSoup(jn_site, "html.parser")
 
 # print(soup2.title.string)
 
-site_string2 = "https://www.bbc.com/persian"
+site_string2 = "https://www.sparknotes.com/lit/animaldreams/summary/"
 
 site3 = urllib.request.urlopen(site_string2)
 soup3 = BeautifulSoup(site3, "html.parser")
 
 # print(soup3.title.string)
 
-site_string3 = "https://en.wikipedia.org/wiki/Principles_and_parameters"
+site_string3 = "https://www.sparknotes.com/lit/animaldreams/summary/"
 site4 = urllib.request.urlopen(site_string3)
 soup4 = BeautifulSoup(site4, "html.parser")
 # print(soup4.prettify())
@@ -77,15 +77,17 @@ p_tags = soup4.find_all("p")
 # print(type(p_tags))
 
 #for p_tag in p_tags:
- #   print(p_tag.text)
+   # print(p_tag.text)
 
 chomsky_text = ""
 for p_tag in p_tags:
     chomsky_text += p_tag.text
 # print(chomsky_text)
 
-chomsky_tokens = word_tokenize(chomsky_text)
-# print(chomsky_tokens)
+chomsky_tokens = sent_tokenize(chomsky_text)
+for line in chomsky_tokens:
+    print(line)
+print(chomsky_tokens)
 
 pos_tagged_chomsky = nltk.pos_tag(chomsky_tokens)
 
@@ -113,5 +115,5 @@ df = pd.DataFrame(list(vowels_wordLength.items()), columns=['Vowels', 'Character
 
 # print(df)
 
-scatter1 = sns.regplot(x="Vowels", y="Characters", data=df)
-plt.show()
+# scatter1 = sns.regplot(x="Vowels", y="Characters", data=df)
+# plt.show()
