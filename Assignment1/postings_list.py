@@ -11,7 +11,7 @@ class Postings:
 
     def read_file(self):
         sorted_tokenized_doc = []
-        with open(self.document, 'r', encoding='utf-8') as doc:
+        with open(self.document, 'r') as doc:
             for line in doc:
                 for word in word_tokenize(line.lower()):
                     if word not in sorted_tokenized_doc:
