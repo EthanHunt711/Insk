@@ -1,14 +1,10 @@
+import sys
 import os
 import re
-import nltk
+from sys import argv, stderr
 import string
 import urllib.request
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
 
-from collections import defaultdict
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize, word_tokenize
 
@@ -40,3 +36,15 @@ class Summary:
     def read_urls(self):
         for url in self.url_list:
             self.open_url(url)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print("usage: python3 summary_web_scraping.py LIST_FILE")
+        exit()
+
+    list_file = sys.argv[1]
+
+    with open(list_file, 'r') as f:
+        for line in f:
+            summaries = Summary(line)
