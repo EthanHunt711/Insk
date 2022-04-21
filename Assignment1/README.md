@@ -32,7 +32,7 @@ used in the main program for implementing boolean queries.</p>
 <li>run the program using the .txt files provided in the folder named resources</li>
 <li>run the main program: python3 main_querry.py FOLDER_PATH</li>
 <li>FOLDER_PATH must be the path to the file where the .txt files are saved</li>
-<li>FOLDER_PATH must be given as shown here: python main_querry.py '....Projects/Insk/Assignment1/'
+<li>FOLDER_PATH must be given as shown here: python main_querry.py '....Projects/Insk/Assignment1/Resources/'
  </li>
 <li>if the path does NOT end with a slash, the program cannot read the files</li>
 </ol>
