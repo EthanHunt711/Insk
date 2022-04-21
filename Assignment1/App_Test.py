@@ -1,0 +1,16 @@
+from main_querry import *
+from intersection import *
+import unittest
+
+
+class TestBooleanQuery(unittest.TestCase):
+    path = 'C:/Users/alies/PycharmProjects/Insk/Assignment1/Resources/'
+    test_dictionary = make_dic_postings(path)
+    test_q1 = test_dictionary['baby']
+    test_q2 = test_dictionary['mother']
+
+    def test_boolean(self):
+        inters = Intersection(self.test_q1, self.test_q2)
+        self.assertEqual(inters.intersect_and(), ['BleakHouseFullBookSummarySparkNotes.txt', 'Midnight’sChildrenFullBookSummarySparkNotes.txt'])
+        self.assertEqual(inters.intersect_or(), {'AllQuietontheWesternFrontFullBookSummarySparkNotes.txt', 'EthanFromeFullBookSummarySparkNotes.txt', 'HarryPotterandTheOrderofthePhoenixFullBookSummarySparkNotes.txt', 'HarryPotterandtheHalfBloodPrinceFullBookSummarySparkNotes.txt', 'TheAmericanFullBookSummarySparkNotes.txt', 'HarryPotterandtheSorcerer’sStoneFullBookSummarySparkNotes.txt', 'BleakHouseFullBookSummarySparkNotes.txt', 'HarryPotterandtheGobletofFireFullBookSummarySparkNotes.txt', 'OneFlewOvertheCuckoo’sNestFullBookSummarySparkNotes.txt', 'TheKitchenGodsWifeFullBookSummarySparkNotes.txt', 'BridesheadRevisitedFullBookSummarySparkNotes.txt', 'DivergentFullBookSummarySparkNotes.txt', 'DuneFullBookSummarySparkNotes.txt', 'Midnight’sChildrenFullBookSummarySparkNotes.txt', 'HarryPotterandtheDeathlyHallowsFullBookSummarySparkNotes.txt', 'DiaryofaWimpyKidFullBookSummarySparkNotes.txt', 'FlowersforAlgernonFullBookSummarySparkNotes.txt'})
+        self.assertEqual(inters.intersect_not(), {'HarryPotterandtheSorcerer’sStoneFullBookSummarySparkNotes.txt'})
