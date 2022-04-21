@@ -37,4 +37,9 @@ used in the main program for implementing boolean queries.</p>
 <li>if the path does NOT end with a slash, the program cannot read the files</li>
 </ol>
 </ul>
+<h3>Testing</h3>
+<p></p>
+<p>A very small and minimal unit test is designed for this program, which could be run 
+by running this line:</p>
+<p>     python3 -m unittest App_Test.py</p>
 
