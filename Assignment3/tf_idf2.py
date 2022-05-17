@@ -1,4 +1,6 @@
 import numpy as np
+import math
+
 
 class TF_IDF:
     def __init__(self, total_document, index_dict, word_count):
@@ -11,17 +13,18 @@ class TF_IDF:
         self.word = word
 
         N = len(self.document)
-        occurance = len([token for token in self.document if token == self.word])
-        return occurance/N
+        print(N)
+        occurrence = len([token for token in self.document if token == self.word])
+        return 1 + np.log10(occurrence/N)
 
     def idf(self, word):
         self.word = word
         try:
-            word_occurance = self.word_count[self.word] + 1
+            word_occurrence = self.word_count[self.word] + 1
         except:
-            word_occurance = 1
+            word_occurrence = 1
 
-        return np.log(self.total_document/word_occurance, where=self.total_document/word_occurance > 0)
+        return math.log10(self.total_document/word_occurrence)
 
     def tf_idf(self, sentence, word_set):
         self.sentence = sentence

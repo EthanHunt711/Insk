@@ -5,7 +5,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 class Vocabulary:
     def __init__(self, path):
-        self.path = open(path, 'r', encoding='utf-8')
+        self.path = open(path, 'r')
 
     def text_to_sent_tokenize(self):
         sentences = []
