@@ -52,6 +52,6 @@ class TF_IDF:
             idf = self.idf_dict[word]
 
             weight = (1 + np.log(tf)) * (np.log10(idf))
-            tf_idf_vec[self.idx_dict[word]] = weight
+            tf_idf_vec[self.idx_dict[word]] = round(weight, 2)
 
         return tf_idf_vec
