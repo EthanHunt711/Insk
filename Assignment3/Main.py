@@ -73,24 +73,32 @@ def main_ve(path):
                             corpus_index_dicts[i+1])
         vectors_dict[i+1] = v
 
-    query = input("please enter your query word: ")
-    query_tokenized = word_tokenize(query)
-    score = []
-    for q in query_tokenized:
-        score_q = []
-        for i, document in enumerate(corpus_token_lists):
-            if q not in document:
-                score_q.append(0)
-            idx = corpus_index_dicts[i+1][q]
-            tf_idf_weight = vectors_dict[i+1][idx]
-            score_q.append(tf_idf_weight)
-        score.append(score_q)
-
-    score_f = []
-    for s_q in score:
-        score_f.append(sum(s_q))
-
-
+    ddd = {}
+    j = 0
+    query = input('enter a word:')
+    for word in corpus_token_lists[j]:
+        if word == query:
+            ddd[j] = corpus_index_dicts[j+1][word], word, term_freq_dicts[j+1][word], idf_dict[word]
+            j += 1
+    print(ddd)
+    # query = input("please enter your query word: ")
+    # query_tokenized = word_tokenize(query)
+    # score = []
+    # for q in query_tokenized:
+    #     score_q = []
+    #     for i, document in enumerate(corpus_token_lists):
+    #         if q not in document:
+    #             score_q.append(0)
+    #         idx = corpus_index_dicts[i+1][q]
+    #         tf_idf_weight = vectors_dict[i+1][idx]
+    #         score_q.append(tf_idf_weight)
+    #     score.append(score_q)
+    #
+    # score_f = []
+    # for s_q in score:
+    #     score_f.append(sum(s_q))
+    #
+    # return score_f
 
 if __name__ == '__main__':
 
