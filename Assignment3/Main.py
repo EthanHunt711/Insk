@@ -5,7 +5,6 @@ import fnmatch
 from time import time
 from sys import stdin, stderr
 from collections import defaultdict
-
 import numpy as np
 
 from vocabulary import *
@@ -74,7 +73,23 @@ def main_ve(path):
                             corpus_index_dicts[i+1])
         vectors_dict[i+1] = v
 
-    print(vectors_dict[1][0], corpus_token_lists[0][0])
+    query = input("please enter your query word: ")
+    query_tokenized = word_tokenize(query)
+    score = []
+    for q in query_tokenized:
+        score_q = []
+        for i, document in enumerate(corpus_token_lists):
+            if q not in document:
+                score_q.append(0)
+            idx = corpus_index_dicts[i+1][q]
+            tf_idf_weight = vectors_dict[i+1][idx]
+            score_q.append(tf_idf_weight)
+        score.append(score_q)
+
+    score_f = []
+    for s_q in score:
+        score_f.append(sum(s_q))
+
 
 
 if __name__ == '__main__':
@@ -92,22 +107,3 @@ if __name__ == '__main__':
     print('-------------------------------------------\n')
 
     main_ve(path)
-
-
-# def main(file):
-#
-#     v = Vocabulary(file)
-#
-#     sentences = v.text_to_sent_tokenize()
-#     word_set = v.make_set(v.sent_tokenize_to_word_set(sentences))
-#
-#     word_count = Count_dict(word_set, sentences).count_dict()
-#
-#     tf_idf = TF_IDF(v.number_of_doc(sentences), v.make_index(v.make_set(word_set)), word_count)
-#
-#     vectors = []
-#     for sent in sentences:
-#         vec = tf_idf.tf_idf(sent, word_set)
-#         vectors.append(vec)
-#     # an example
-#     print(vectors)
