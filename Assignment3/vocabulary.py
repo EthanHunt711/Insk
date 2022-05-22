@@ -9,12 +9,12 @@ class Vocabulary:
 
     def text_tokenize(self):
         token_list = []
-        # lemmatizer = WordNetLemmatizer()
+        lemmatizer = WordNetLemmatizer()
         # stop_words = set(stopwords.words('english'))
         for line in self.path:
             for token in line.split():
                 if token.isalpha():
-                    token_list.append(token.lower())
+                    token_list.append(lemmatizer.lemmatize(token.lower()))
         return token_list
 
     def token_list_to_word_set(self, token_list):
