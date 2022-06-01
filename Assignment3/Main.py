@@ -73,14 +73,27 @@ def main_ve(path):
                             corpus_index_dicts[i+1])
         vectors_dict[i+1] = v
 
+    # print(corpus_token_lists[0])
+    # print(word_set_sets[1])
+    # print(corpus_index_dicts[1]['is'])
+    # print(len(corpus_count_dicts[1]))
+    # print(len(term_freq_dicts[1]))
+    # print(vectors_dict[1][corpus_index_dicts[1]['is']])
     ddd = {}
-    j = 0
+
     query = input('enter a word:')
-    for word in corpus_token_lists[j]:
-        if word == query:
-            ddd[j] = corpus_index_dicts[j+1][word], word, term_freq_dicts[j+1][word], idf_dict[word]
-            j += 1
-    print(ddd)
+    query_t = word_tokenize(query.lower())
+    for j in range(1, len(corpus_document_names)+1):
+        ddd[j] = []
+        for word in word_set_sets[j]:
+            if word in query_t:
+                ddd[j].append(vectors_dict[j][corpus_index_dicts[j][word]])
+
+    output_result = {k: v for k, v in sorted(ddd.items(), key=lambda item: item[1])}
+    for x in list(output_result)[30:]:
+        print(corpus_document_names[x])
+
+
     # query = input("please enter your query word: ")
     # query_tokenized = word_tokenize(query)
     # score = []

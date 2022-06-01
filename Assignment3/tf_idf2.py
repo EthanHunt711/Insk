@@ -1,5 +1,4 @@
 import numpy as np
-import math
 
 
 class TF_IDF:
@@ -48,10 +47,10 @@ class TF_IDF:
         self.idx_dict = idx_dict
         tf_idf_vec = np.zeros((len(self.word_set),))
         for word in self.document:
-            tf = self.term_freq_dict[word]
-            idf = self.idf_dict[word]
+            tf = 1 + np.log(self.term_freq_dict[word])
+            idf = np.log10(self.idf_dict[word])
 
-            weight = (1 + np.log(tf)) * (np.log10(idf))
+            weight = tf * idf
             tf_idf_vec[self.idx_dict[word]] = round(weight, 2)
 
         return tf_idf_vec

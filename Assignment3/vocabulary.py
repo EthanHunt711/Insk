@@ -1,20 +1,23 @@
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.stem import PorterStemmer
 
 
 class Vocabulary:
     def __init__(self, path):
-        self.path = open(path, 'r')
+        self.path = open(path, 'r', encoding='utf-8', errors='ignore')
 
     def text_tokenize(self):
         token_list = []
         lemmatizer = WordNetLemmatizer()
-        # stop_words = set(stopwords.words('english'))
+        porter = PorterStemmer()
+        stop_words = set(stopwords.words('english'))
         for line in self.path:
             for token in line.split():
                 if token.isalpha():
-                    token_list.append(lemmatizer.lemmatize(token.lower()))
+                    if token not in stop_words:
+                        token_list.append(porter.stem(lemmatizer.lemmatize(token.lower())))
         return token_list
 
     def token_list_to_word_set(self, token_list):
