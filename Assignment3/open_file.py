@@ -1,10 +1,9 @@
 import os
 import sys
 import numpy as np
-import operator
 
 from time import time
-from sys import stdin, stderr
+from sys import stderr
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -86,20 +85,19 @@ def tf_idf(corpus, tf_dicts, idf_dict, index_dicts, word_set):
     for i, documemt in enumerate(corpus):
         tf_idf_vectors.append(np.zeros((len(word_set), )))
         for token in word_set:
-            # if token in documemt:
             tf = tf_dicts[i][token]
-            # else:
-            #     tf = 0
             idf = idf_dict[token]
 
             tf_idf_weight = tf*idf
             tf_idf_vectors[i][index_dicts[token]] = round(tf_idf_weight, 4)
     return tf_idf_vectors
 
+
 def query_to_corpus(query):
     query_corpus = []
     query_corpus.append([porter.stem(lemmatizer.lemmatize(token.lower())) for token in word_tokenize(query)])
     return query_corpus
+
 
 def query_to_vector(query_corpus, idf_dicts, index_dicts, word_set):
 
@@ -114,8 +112,6 @@ def query_to_vector(query_corpus, idf_dicts, index_dicts, word_set):
 
 
 def cosine_similarity(query_vec, corpus):
-    # result_dict = {}
-    # for i, document_vec in enumerate(corpus):
     result_dict = dot(corpus, query_vec)/(norm(corpus)*norm(query_vec))
 
     return result_dict
@@ -125,7 +121,27 @@ def sort_dict_by_value(d, reverse=False):
     return dict(sorted(d.items(), key=lambda x: x[1], reverse=reverse))
 
 
+def extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name):
+    q_p = query_to_corpus(q)
+    q_v = query_to_vector(q_p, iddf, index_dic, word_set)
+
+    cosine_dict = {}
+    for i in range(len(g)):
+        cosine_dict[i] = cosine_similarity(q_v[0], g[i])
+    co_di_s = sort_dict_by_value(cosine_dict, True)
+
+    retrieved_documents = np.zeros((11,), dtype=int)
+    for i in range(11):
+        retrieved_documents[i] = list(co_di_s)[i]
+
+    number = 1
+    for x in list(co_di_s)[:10]:
+        print(number, corpus_document_name[x])
+        number += 1
+
+
 def main(path):
+    start = time()
     os.chdir(path)
 
     print("Loading files from " + path + "...", file=stderr)
@@ -152,28 +168,42 @@ def main(path):
     index_dic = indexing(word_set)
 
     g = tf_idf(corpus, tf_dicts, iddf, index_dic, word_set)
+    print('-------------------------------------------\n')
+    print("Loading Time: (%.2f)s\n" % (time() - start), file=stderr)
+    print('-------------------------------------------\n')
+    print('-------------------------------------------\n')
 
-    q = input('Please enter your query:')
-    q_p = query_to_corpus(q)
-    q_v = query_to_vector(q_p, iddf, index_dic, word_set)
+    while True:
+        m_in = input('Do you have a query?')
 
-    # r = cosine_similarity(g[0], g[1])
-    # t = cosine_similarity(g[0], g[2])
-    # print(np.shape(q_v[0]))
-    # print(np.shape(g[0]))
-    cosine_dict = {}
-    for i in range(len(g)):
-        cosine_dict[i] = cosine_similarity(q_v[0], g[i])
-    co_di_s = sort_dict_by_value(cosine_dict, True)
+        if m_in.lower() == 'yes':
+            q = input('Please enter your query:')
+            extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name)
+        if m_in.lower() == 'no':
+            print('Thanks, hope you FoundIt :) !')
+            sys.exit()
+        else:
+            print("Sorry I don't understand, would you please repeat again!")
+            print('--------------------------------------------------------')
+            print('--------------------------------------------------------')
+            main(path)
+    # q_p = query_to_corpus(q)
+    # q_v = query_to_vector(q_p, iddf, index_dic, word_set)
+    #
+    # cosine_dict = {}
+    # for i in range(len(g)):
+    #     cosine_dict[i] = cosine_similarity(q_v[0], g[i])
+    # co_di_s = sort_dict_by_value(cosine_dict, True)
+    #
+    # retrieved_documents = np.zeros((11, ), dtype=int)
+    # for i in range(11):
+    #     retrieved_documents[i] = list(co_di_s)[i]
+    #
+    # number = 1
+    # for x in list(co_di_s)[:10]:
+    #     print(number, corpus_document_name[x])
+    #     number += 1
 
-
-    number = 1
-    for x in list(co_di_s)[:10]:
-        print(number, corpus_document_name[x])
-        number += 1
-    # print(corpus_document_name)
-    # print(type(q_v))
-    # print(type(g))
 
 if __name__ == '__main__':
 
@@ -181,12 +211,9 @@ if __name__ == '__main__':
         print("usage: python3 main_querry.py FOLDER_PATH")
         exit()
 
-    start = time()
     path = sys.argv[1]
 
-    print("Time: (%.2f)s\n" % (time() - start), file=stderr)
-
-    print('welcome to FindIt\n')
+    print('Welcome to FindIt\n')
     print('-------------------------------------------\n')
 
     main(path)
