@@ -138,7 +138,6 @@ def extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name):  # ma
     for i in range(11):
         retrieved_documents[i] = list(co_di_s)[i]
 
-    print(retrieved_documents)
 
     number = 1
     for x in list(co_di_s)[:10]:
