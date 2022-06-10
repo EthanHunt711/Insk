@@ -11,6 +11,10 @@ from nltk.stem import PorterStemmer
 from numpy import dot
 from numpy.linalg import norm
 
+""" This program is an implementation of an information retrieval algorithm taking advantage of cosine similarity
+between vectors of query and n documents where n=>1
+The program is designed for reading a set of k txt files from a source folder where k=>1"""
+
 lemmatizer = WordNetLemmatizer()
 porter = PorterStemmer()
 stop_words = set(stopwords.words('english'))
@@ -134,6 +138,8 @@ def extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name):  # ma
     for i in range(11):
         retrieved_documents[i] = list(co_di_s)[i]
 
+    print(retrieved_documents)
+
     number = 1
     for x in list(co_di_s)[:10]:
         print(number, corpus_document_name[x])
@@ -162,7 +168,7 @@ def in_main(iddf, index_dic, word_set, g, corpus_document_name):  # menu in main
 
 def main(path):  # the main method for reading from resources and returning the top k documents
     start = time()
-    os.chdir(path)
+    os.chdir(path)  # reading from the directory where txt files are stored
 
     print("Loading files from " + path + "...", file=stderr)
 
@@ -199,7 +205,7 @@ def main(path):  # the main method for reading from resources and returning the 
 if __name__ == '__main__':
 
     if len(sys.argv) != 2:
-        print("usage: python3 main_querry.py FOLDER_PATH")
+        print("usage: python3 cosine_top_k.py FOLDER_PATH")
         exit()
 
     path = sys.argv[1]
