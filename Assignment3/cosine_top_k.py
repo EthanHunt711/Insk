@@ -195,37 +195,6 @@ def main(path):  # the main method for reading from resources and returning the 
 
     in_main(iddf, index_dic, word_set, g, corpus_document_name)
 
-    # while True:
-    #     m_in = input('Do you have a query?')
-    #
-    #     if m_in.lower() == 'yes':
-    #         q = input('Please enter your query:')
-    #         extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name)
-    #     if m_in.lower() == 'no':
-    #         print('Thanks, hope you FoundIt :) !')
-    #         sys.exit()
-    #     else:
-    #         print("Sorry I don't understand, would you please repeat again!")
-    #         print('--------------------------------------------------------')
-    #         print('--------------------------------------------------------')
-    #         main(path)
-    # q_p = query_to_corpus(q)
-    # q_v = query_to_vector(q_p, iddf, index_dic, word_set)
-    #
-    # cosine_dict = {}
-    # for i in range(len(g)):
-    #     cosine_dict[i] = cosine_similarity(q_v[0], g[i])
-    # co_di_s = sort_dict_by_value(cosine_dict, True)
-    #
-    # retrieved_documents = np.zeros((11, ), dtype=int)
-    # for i in range(11):
-    #     retrieved_documents[i] = list(co_di_s)[i]
-    #
-    # number = 1
-    # for x in list(co_di_s)[:10]:
-    #     print(number, corpus_document_name[x])
-    #     number += 1
-
 
 if __name__ == '__main__':
 
