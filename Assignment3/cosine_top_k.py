@@ -16,7 +16,7 @@ porter = PorterStemmer()
 stop_words = set(stopwords.words('english'))
 
 
-def tokenization(d):
+def tokenization(d):  # preprocessing the words in a single document
     token_list = []
     for line in d:
         for token in line.split():
@@ -26,12 +26,12 @@ def tokenization(d):
     return token_list
 
 
-def text_tok(document):
+def text_tok(document):  # opening a file in order to preprocess
     with open(document, 'r', encoding='utf-8', errors='ignore') as d:
         return tokenization(d)
 
 
-def doc_lists_to_word_set(doc_lists):
+def doc_lists_to_word_set(doc_lists):  # creating a dictionary (word set)
     word_set = []
     for doc in doc_lists:
         for word in doc:
@@ -39,7 +39,7 @@ def doc_lists_to_word_set(doc_lists):
     return set(word_set)
 
 
-def indexing(word_set):
+def indexing(word_set):  # indexing the word set in order to use later in vectorization and extracting
     index_dict = {}
     i = 0
     for t in word_set:
@@ -48,7 +48,7 @@ def indexing(word_set):
     return index_dict
 
 
-def count(document, word_set):
+def count(document, word_set):  # making a dictionary for counts of each token in a document
     count = {}
     for word in word_set:
         count[word] = 0
@@ -58,7 +58,7 @@ def count(document, word_set):
     return count
 
 
-def term_freq(document, count_dict, word_set):
+def term_freq(document, count_dict, word_set):  # counting the term frequency for each document
     tf = {}
     for word in word_set:
         tf[word] = 0
@@ -67,7 +67,7 @@ def term_freq(document, count_dict, word_set):
     return tf
 
 
-def idf(corpus, word_set):
+def idf(corpus, word_set):  # creating the inverse document frequency for each word in each document
     df = {}
     idf = {}
     for word in word_set:
@@ -80,7 +80,7 @@ def idf(corpus, word_set):
     return idf
 
 
-def tf_idf(corpus, tf_dicts, idf_dict, index_dicts, word_set):
+def tf_idf(corpus, tf_dicts, idf_dict, index_dicts, word_set):  # assigning tf-idf weights to each token (vectorization)
     tf_idf_vectors = []
     for i, documemt in enumerate(corpus):
         tf_idf_vectors.append(np.zeros((len(word_set), )))
@@ -93,13 +93,13 @@ def tf_idf(corpus, tf_dicts, idf_dict, index_dicts, word_set):
     return tf_idf_vectors
 
 
-def query_to_corpus(query):
+def query_to_corpus(query):  # creating a corpus out of the query
     query_corpus = []
     query_corpus.append([porter.stem(lemmatizer.lemmatize(token.lower())) for token in word_tokenize(query)])
     return query_corpus
 
 
-def query_to_vector(query_corpus, idf_dicts, index_dicts, word_set):
+def query_to_vector(query_corpus, idf_dicts, index_dicts, word_set):  # vectorizing the query
 
     query_count = count(query_corpus[0], word_set)
 
@@ -111,17 +111,17 @@ def query_to_vector(query_corpus, idf_dicts, index_dicts, word_set):
     return query_tfidf
 
 
-def cosine_similarity(query_vec, corpus):
+def cosine_similarity(query_vec, corpus):  # calculating cosine similarity based on the query and each document
     result_dict = dot(corpus, query_vec)/(norm(corpus)*norm(query_vec))
 
     return result_dict
 
 
-def sort_dict_by_value(d, reverse=False):
+def sort_dict_by_value(d, reverse=False):  # a sorting definition for sorting by value
     return dict(sorted(d.items(), key=lambda x: x[1], reverse=reverse))
 
 
-def extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name):
+def extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name):  # making a list of k top documents
     q_p = query_to_corpus(q)
     q_v = query_to_vector(q_p, iddf, index_dic, word_set)
 
@@ -140,7 +140,27 @@ def extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name):
         number += 1
 
 
-def main(path):
+def in_main(iddf, index_dic, word_set, g, corpus_document_name):  # menu in main
+    while True:
+        m_in = input('Do you have a query?')
+
+        if m_in.lower() == 'yes':
+            q = input('Please enter your query:')
+            extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name)
+            print('--------------------------------------------------------')
+            print('--------------------------------------------------------')
+            in_main(iddf, index_dic, word_set, g, corpus_document_name)
+        if m_in.lower() == 'no':
+            print('Thanks, hope you FoundIt :) !')
+            sys.exit()
+        else:
+            print("Sorry I don't understand, would you please repeat again!")
+            print('--------------------------------------------------------')
+            print('--------------------------------------------------------')
+            in_main(iddf, index_dic, word_set, g, corpus_document_name)
+
+
+def main(path):  # the main method for reading from resources and returning the top k documents
     start = time()
     os.chdir(path)
 
@@ -173,20 +193,22 @@ def main(path):
     print('-------------------------------------------\n')
     print('-------------------------------------------\n')
 
-    while True:
-        m_in = input('Do you have a query?')
+    in_main(iddf, index_dic, word_set, g, corpus_document_name)
 
-        if m_in.lower() == 'yes':
-            q = input('Please enter your query:')
-            extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name)
-        if m_in.lower() == 'no':
-            print('Thanks, hope you FoundIt :) !')
-            sys.exit()
-        else:
-            print("Sorry I don't understand, would you please repeat again!")
-            print('--------------------------------------------------------')
-            print('--------------------------------------------------------')
-            main(path)
+    # while True:
+    #     m_in = input('Do you have a query?')
+    #
+    #     if m_in.lower() == 'yes':
+    #         q = input('Please enter your query:')
+    #         extract_cosine(q, iddf, index_dic, word_set, g, corpus_document_name)
+    #     if m_in.lower() == 'no':
+    #         print('Thanks, hope you FoundIt :) !')
+    #         sys.exit()
+    #     else:
+    #         print("Sorry I don't understand, would you please repeat again!")
+    #         print('--------------------------------------------------------')
+    #         print('--------------------------------------------------------')
+    #         main(path)
     # q_p = query_to_corpus(q)
     # q_v = query_to_vector(q_p, iddf, index_dic, word_set)
     #
